@@ -25,7 +25,7 @@
                 -13px -13px 20px #ffffff;
   }
   .logo {
-    background:url("https://source.unsplash.com/100x100/?nature,water");
+    background:url(.\\images\\Logo.png);
     width:100px;
     height: 100px;
     border-radius: 50%;

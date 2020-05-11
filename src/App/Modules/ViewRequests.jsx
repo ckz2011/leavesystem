@@ -31,8 +31,8 @@ class ViewRequests extends Component {
 
             // Ajax Call
 
-            let response = await axios.post(url, this.state);
-
+            let response = await axios.post(url, this.props.userData);
+                console.log("emoyeecode",this.props.userData)
             console.log(response.data);
             console.log(response.status);
             if (response.data) {
@@ -58,35 +58,48 @@ class ViewRequests extends Component {
         console.log('in view request', this.props.userData)
         console.log('in view request lv data', this.state.leaveReqDetails)
 
-        const data = [{
-            name: 'Tanner Linsley',
-            age: 26,
-            friend: {
-                name: 'Jason Maurer',
-                age: 23,
-            }
-        }, {
-
-        }]
+        const data =this.state.leaveReqDetails
+    
 
         const columns = [{
-            Header: 'Name',
-            accessor: 'name' // String-based value accessors!
+            Header: 'Request Id',
+            accessor: 'lvrqid' // String-based value accessors!
         }, {
-            Header: 'Age',
-            accessor: 'age',
+            Header: 'Leave From',
+            accessor: 'startDate',
             // Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
-        }
+        },
+            {
+                Header: 'Leave To',
+                accessor: 'endDate',
+                // Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+            },
+
+            {
+                Header: 'Current Status',
+                accessor: 'stage',
+                // Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+            },
+            {
+                Header: 'No of leaves',
+                accessor: 'noofleaves',
+                // Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+            }
+
+
+
+            
     ]
 
 
 
         return (
-
+            <Container style={{ justifyContent: 'center', width: '80%', marginTop: "1%" }}>
             <ReactTable
                 data={data}
                 columns={columns}
             />
+            </Container>
         )
     }
 }

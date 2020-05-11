@@ -25,7 +25,7 @@ export default class MainPanel extends Component {
         console.log(this.props.LoadPanel)
         return (
             <div>
-              <LoadScreen/>
+              <LoadScreen userData={this.props.userData}/>
             </div>
         )
     }

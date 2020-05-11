@@ -25,6 +25,7 @@ class FormTab extends Component {
       postaprrovalreq: false,
       outstationperm: 'false',
       radiodisplay: 'none',
+      leavephoneno:''
 
     }
   }
@@ -221,6 +222,12 @@ class FormTab extends Component {
 
     });
   }
+  handlePhoneno = (event) => {
+    this.setState({
+      leavephoneno: event.target.value,
+
+    });
+  }
 
   handlePostApproval = (event) => {
     this.setState({
@@ -334,17 +341,22 @@ class FormTab extends Component {
               <Col colSpan="2">
                 <Form.Check type="checkbox" name="outstationperm" onChange={this.handleStationPerm} id="outstationperm" label="Permission to leave station required" id="halfDayTo" />
                 <Form.Label><b>Address during leave period</b></Form.Label>
+                
                 <Form.Control as="textarea" rows="2" required name="address" onChange={this.handleAddress} />
+                <Form.Label><b>Contact no. during leave period</b></Form.Label>
+                <Form.Control type="number"  pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"  required name="leavephoneno" onChange={this.handlePhoneno} />
               </Col>
             </Row>
+            
           </Form.Group>
           <Form.Group>
             <Row>
               <Col colSpan="2">
                 <Form.Label><b>Purpose</b></Form.Label>
-                <Form.Control required as="textarea" rows="1" namr="purpose" onChange={this.handlePurpose} />
+                <Form.Control required as="textarea" rows="1" name="purpose" onChange={this.handlePurpose} />
               </Col>
             </Row>
+            
           </Form.Group>
           <Form.Group style={{ display: this.state.postapproval }}>
             <Row>

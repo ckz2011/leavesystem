@@ -23,7 +23,7 @@ render() {
     <Tabs variant='tabs'  defaultActiveKey="genShift" id="uncontrolled-tab-example">
        
     <Tab eventKey="genShift" title="General Shift"  >
-    <FormTab weekday={true} shiftType = "GENERAL" />
+    <FormTab weekday={true} userdata = "GENERAL" />
     </Tab>
     <Tab eventKey="shifOps" title="Shift Operations"  >
     <FormTab weekday={false} shiftType = "SHIFTS" />

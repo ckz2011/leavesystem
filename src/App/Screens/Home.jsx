@@ -23,11 +23,12 @@ class Home extends PureComponent {
 
 
     render() {
+       
         return (
             <div>
-                <Header />
-                <ButtonPanel method={this.getSelectedButton} />
-                <MainPanel LoadPanel={this.state.selected} />
+                <Header userData={this.props.location.userData} />
+                <ButtonPanel method={this.getSelectedButton} userData={this.props.location.userData}/>
+                <MainPanel LoadPanel={this.state.selected} userData={this.props.location.userData} />
             </div>
 
         )

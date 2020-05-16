@@ -235,6 +235,9 @@ class FormTab extends Component {
 
     });
   }
+  addDays = (date,number) =>{
+    return date+number;
+  }
 
   formatDate = (date, format = 'YYYY-MM-DD') => {
     return date.getFullYear() + "-" + (date.getMonth() <9 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" + (date.getDate() <=0 ? ("0" + date.getDate()) : date.getDate());
@@ -282,6 +285,7 @@ class FormTab extends Component {
     console.log(this.state)
 
   }
+ 
 
 
 
@@ -308,13 +312,13 @@ class FormTab extends Component {
                     <Form.Label ><b>Leave From :</b> </Form.Label>
                   </Col>
                   <Col>
-                    <DatePicker required id="leaveFrom" filterDate={weekdayprop} selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleStartDateChange} />
+                    <DatePicker  required id="leaveFrom" filterDate={weekdayprop} selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleStartDateChange} />
                   </Col>
                 </Row>
 
                 <Form.Group  >
                   <Row>
-                    <Col><Form.Check type="checkbox" label="Half day" id="halfDayFrom" onChange={this.fromHandleHalfday} />
+                    <Col><Form.Check type="checkbox" label="Half day"  id="halfDayFrom" onChange={this.fromHandleHalfday} />
                     </Col><Col> <Form.Check onChange={this.handleHalfDayTime} type="radio" label="First Half" value="forenoon" name="fromhalf" style={{ display: this.state.radiodisplay }} required={this.state.radiodisplayreq} />
                     </Col> <Col><Form.Check onChange={this.handleHalfDayTime} type="radio" label="Second Half" value="afternoon" name="fromhalf" style={{ display: this.state.radiodisplay }} required={this.state.radiodisplayreq} />
                     </Col>

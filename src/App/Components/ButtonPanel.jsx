@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { StyleSheet, css } from 'aphrodite'
 import Button from '../Components/Button'
 import privileges from '../Config/privileges'
@@ -19,7 +19,7 @@ const Style = StyleSheet.create({
 
 });
 
-class ButtonPanel extends PureComponent {
+class ButtonPanel extends Component {
     constructor(props) {
         super(props)
 
@@ -38,8 +38,11 @@ class ButtonPanel extends PureComponent {
     render() {
         let actionsButtons = new Array();
         //get role from privileges
-
-        var role = 'approver'
+        let role=this.props.userData.userrole
+        // var role =this.props.UserData.userrole
+        //var role=this.props.userData.userrole
+        console.log("props is",this.props.userData.userrole)
+        console.log("in button Panel",role)
         var i = 0;
         for (var action in privileges[role]) {
             i = i + 1;

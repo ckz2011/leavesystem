@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ApplyLeave from '../Modules/ApplyLeave';
 import ViewRequests from '../Modules/ViewRequests';
-
+import PendingRequest from '../Modules/PendingRequest';
 export default class MainPanel extends Component {
     render() {
         //Get button value
@@ -18,6 +18,8 @@ export default class MainPanel extends Component {
             case "ViewRequests":
                 LoadScreen = ViewRequests
                 break;
+                case "PendingRequest":
+                    LoadScreen= PendingRequest
             default:
                 break;
         }
@@ -25,6 +27,7 @@ export default class MainPanel extends Component {
         console.log(this.props.LoadPanel)
         return (
             <div>
+                {/* <div>Hello</div> */}
               <LoadScreen userData={this.props.userData}/>
             </div>
         )

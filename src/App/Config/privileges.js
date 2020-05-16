@@ -8,8 +8,16 @@ let privileges = {
         "Apply Leave": "ApplyLeave",
         "View Leave Requests": "ViewRequests",
         "Pending Requests": "PendingRequest",
-        "Employee Leave Status": "EmployeeLvStatus",
-        "Leave Report": "LeaveReport"
+        // "Employee Leave Status": "EmployeeLvStatus",
+        // "Leave Report": "LeaveReport"
+
+    },
+    forwardoff: {
+        "Apply Leave": "ApplyLeave",
+        "View Leave Requests": "ViewRequests",
+        "Pending Request": "PendingRequest",
+        // "Employee Leave Status": "EmployeeLvStatus",
+        // "Leave Report": "LeaveReport"
 
     }
 }

@@ -24,7 +24,7 @@ class ViewRequests extends Component {
     componentDidMount = async () => {
         try {
 
-            let url = Constants.BASE_URL + Constants.LVREQ_URL;
+            let url = Constants.BASE_URL + Constants.PENDINGLVREQ_URL;
             console.log(url);
 
             // Ajax Call
@@ -61,8 +61,8 @@ class ViewRequests extends Component {
 
 
         return (
-            <Container style={{ justifyContent: 'center', width: '95%', marginTop: "1%" }}>
-             <RequestTable userData={this.props.userData} role='employee'  leaveReqDetails={this.state.leaveReqDetails}></RequestTable>
+            <Container style={{ justifyContent: 'center', width: '90%', marginTop: "1%" }}>
+             <RequestTable userData={this.props.userData} role={this.props.userData.userrole}  leaveReqDetails={this.state.leaveReqDetails}></RequestTable>
             </Container>
         )
     }

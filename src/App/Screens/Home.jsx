@@ -7,7 +7,8 @@ class Home extends PureComponent {
     constructor(props) {
         super(props)
 
-        this.state = {selected:'ApplyLeave'
+        this.state = {
+            selected: 'ApplyLeave'
 
         }
     }
@@ -15,19 +16,19 @@ class Home extends PureComponent {
     getSelectedButton = (event) => {
 
         console.log("In Home", event)
-        this.setState({selected: event.target.id})
-        
+        this.setState({ selected: event.target.id })
+
 
     }
 
 
 
     render() {
-       
+
         return (
             <div>
                 <Header userData={this.props.location.userData} />
-                <ButtonPanel method={this.getSelectedButton} userData={this.props.location.userData}/>
+                <ButtonPanel method={this.getSelectedButton} userData={this.props.location.userData} />
                 <MainPanel LoadPanel={this.state.selected} userData={this.props.location.userData} />
             </div>
 

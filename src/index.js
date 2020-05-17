@@ -6,8 +6,8 @@ import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './forms.css';
 import 'react-table/react-table.css'
-ReactDOM.render( <
-    React.StrictMode >
+import './react-table.override.css';
+ReactDOM.render( < React.StrictMode >
     <
     App / >
     <

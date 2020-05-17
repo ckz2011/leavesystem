@@ -36,24 +36,26 @@ const Style = StyleSheet.create({
 class RequestTable extends Component {
     constructor(props) {
         super(props)
-        this.state = { show: false,
-                        userData:'',
-                        reqData:'',
-                        action:''
+        this.state = {
+            show: false,
+            userData: '',
+            reqData: '',
+            action: '',
+            pageSize: 10
         };
 
     }
 
 
-    showModal = (userData,reqData,action) => {
-        alert('hi show modal');
-        this.setState({ show: true ,
-            userData:userData,
-            reqData:reqData,
-            action:action,
-           
+    showModal = (userData, reqData, action) => {
+        this.setState({
+            show: true,
+            userData: userData,
+            reqData: reqData,
+            action: action,
 
-        
+
+
         });
     };
 
@@ -61,25 +63,24 @@ class RequestTable extends Component {
         this.setState({ show: false });
     };
 
-    processLeaveRequest = async(userData,reqData,action) => {
+    processLeaveRequest = async (userData, reqData, action) => {
         let url = Constants.BASE_URL + Constants.PROCESSLVREQ_URL;
         console.log(url);
         console.log("Final Params going >> ", userData);
         console.log("Final Params going >> ", reqData);
         console.log("Final Params going >> ", action);
-       let jsonData={
-           user:userData,
-           lvdetails:reqData,
-           action:action
-       }
-       console.log('jsonData',JSON.stringify(jsonData))
+        let jsonData = {
+            user: userData,
+            lvdetails: reqData,
+            action: action
+        }
+        console.log('jsonData', JSON.stringify(jsonData))
         // Ajax Call
         let response = await axios.post(url, jsonData);
-        if (response.data)
-        {
+        if (response.data) {
             this.setState({ show: false });
         }
-          console.log("Leave applied")
+        console.log("Leave applied")
 
 
     }
@@ -202,8 +203,17 @@ class RequestTable extends Component {
                 // Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
             },
             {
-                Header: 'Purpose',
-                accessor: 'purpose',
+                Header: 'Details',
+                Cell: row => {
+                    return (
+                      <div>
+                        <span className="class-for-name">{row.original.purpose}</span><br/>
+                        <span className="class-for-description">{row.original.postapprovalval}</span>
+                      </div>
+                    )
+                  }
+             
+
                 // Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
             }
         ]
@@ -214,26 +224,24 @@ class RequestTable extends Component {
 
         return (
             <div>
-                {/* <Modal show={this.state.show} handleClose={this.hideModal}/> */}
-                <>
-                    {/* <Button variant="primary" onClick={() => this.showModal()}>
-        Launch vertically centered modal
-      </Button> */}
+               
 
                     <CustomModal
                         show={this.state.show}
                         userData={this.state.userData}
                         reqData={this.state.reqData}
                         action={this.state.action}
-                        actionFunction={(a,b,c)=>this.processLeaveRequest(a,b,c)}
+                        actionFunction={(a, b, c) => this.processLeaveRequest(a, b, c)}
                         onHide={() => this.hideModal()}
                     />
-                </>
+              
 
 
-                <ReactTable striped bordered hover
+                <ReactTable className="-striped -highlight"
                     data={this.props.leaveReqDetails}
                     columns={columns}
+                    showPagination={true}
+                    defaultPageSize={this.state.pageSize}
                 />
 
             </div>

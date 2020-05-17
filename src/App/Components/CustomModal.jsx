@@ -2,7 +2,7 @@
 
 
 import React, { Component } from 'react'
-import {Button,Modal}  from 'react-bootstrap'
+import {Button,Modal,Table}  from 'react-bootstrap'
 
 
 
@@ -31,10 +31,40 @@ class CustomModal extends Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4>Following  are the details of the leave request selected</h4>
-          <p>
-            {this.props.reqData.employeecode}
-          </p>
+          <Table striped bordered hover size="sm">
+ 
+  
+ 
+  <tbody>
+  <tr>
+      <td>Employeecode</td>
+      <td>{this.props.reqData.employeecode}</td>
+    
+    </tr>
+  <tr>
+      <td>Employeename</td>
+      <td>{this.props.reqData.employeename}</td>
+    
+    </tr>
+    <tr>
+      <td>Period of leave </td>
+      <td>{this.props.reqData.startDate} &nbsp;{this.props.reqData.fromleavetype}to {this.props.reqData.endDate} &nbsp; {this.props.reqData.toleavetype }</td>
+    
+    </tr>
+    <tr>
+      <td>No of Leaves</td>
+      <td>{this.props.reqData.noofleaves}&nbsp;{this.props.reqData.halfdaytime}</td>
+    
+    </tr>
+    <tr>
+      <td>Details</td>
+      <td>{this.props.reqData.purpose}<br/>
+      
+      </td>
+    </tr>
+    
+  </tbody>
+</Table>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={()=>{this.props.actionFunction(this.props.userData,this.props.reqData,this.props.action)}}>{this.props.action}</Button>

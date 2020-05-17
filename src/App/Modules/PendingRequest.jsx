@@ -61,7 +61,7 @@ class ViewRequests extends Component {
 
 
         return (
-            <Container style={{ justifyContent: 'center', width: '90%', marginTop: "1%" }}>
+            <Container  fluid style={{marginLeft:'0px',marginTop:'5px'}}>
              <RequestTable userData={this.props.userData} role={this.props.userData.userrole}  leaveReqDetails={this.state.leaveReqDetails}></RequestTable>
             </Container>
         )

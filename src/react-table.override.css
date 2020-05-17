@@ -1,0 +1,50 @@
+.ReactTable {
+    background: #fff;
+    border: 1px solid #cacaca;
+    border-radius: 3px;
+    width: 100%;
+}
+
+.ReactTable .rt-thead.-header {
+    background: #fff;
+}
+
+.ReactTable .rt-thead .rt-th {
+    padding: 10px;
+}
+
+
+/* for making comments visible */
+
+.ReactTable .rt-td {
+    white-space: normal;
+}
+
+
+/* for making input respectable size */
+
+.ReactTable input:not([type="checkbox"]):not([type="radio"]):not([type="number"]) {
+    /* width: 100px; */
+    border-color: darkgrey;
+}
+
+
+/* Making pagination fixed to bottom*/
+
+
+/* .ReactTable .pagination-bottom{
+    position: fixed;
+    bottom: 0px;
+    background: #8e8e8e;
+    left: 1%;
+    color: #fff;
+    font-weight: 500;
+    width: 98%;
+    } */
+
+.column-filter {
+    /* width: 100px; */
+    background-position: right center;
+    margin: 0px;
+    background-color: #d5d5d5;
+}

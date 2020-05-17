@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-// import Modal from './Modal'
+import CustomModal from './CustomModal'
 import ReactTable from 'react-table';
 import { StyleSheet, css } from 'aphrodite'
-import {Button,Modal}  from 'react-bootstrap'
+import axios from 'axios';
+import Constants from '../Config/core';
+
 const Style = StyleSheet.create({
     ClickButtons: {
         border: '1px solid #c3c1c1',
@@ -29,53 +31,60 @@ const Style = StyleSheet.create({
     }
 
 })
-function MyVerticallyCenteredModal(props) {
-    return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Modal heading
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h4>Centered Modal</h4>
-          <p>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-            consectetur ac, vestibulum at eros.
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
 
 
 class RequestTable extends Component {
     constructor(props) {
         super(props)
-       this. state = { show: false };
-       
-    }
-    
+        this.state = { show: false,
+                        userData:'',
+                        reqData:'',
+                        action:''
+        };
 
-    showModal = () => {
-       
-      this.setState({ show: true });
+    }
+
+
+    showModal = (userData,reqData,action) => {
+        alert('hi show modal');
+        this.setState({ show: true ,
+            userData:userData,
+            reqData:reqData,
+            action:action,
+           
+
+        
+        });
     };
-  
+
     hideModal = () => {
-      this.setState({ show: false });
+        this.setState({ show: false });
     };
-  
-  
+
+    processLeaveRequest = async(userData,reqData,action) => {
+        let url = Constants.BASE_URL + Constants.PROCESSLVREQ_URL;
+        console.log(url);
+        console.log("Final Params going >> ", userData);
+        console.log("Final Params going >> ", reqData);
+        console.log("Final Params going >> ", action);
+       let jsonData={
+           user:userData,
+           lvdetails:reqData,
+           action:action
+       }
+       console.log('jsonData',JSON.stringify(jsonData))
+        // Ajax Call
+        let response = await axios.post(url, jsonData);
+        if (response.data)
+        {
+            this.setState({ show: false });
+        }
+          console.log("Leave applied")
+
+
+    }
+
+
 
     render() {
         const data = this.props.leaveReqDetails
@@ -89,10 +98,11 @@ class RequestTable extends Component {
                     accessor: '',
                     Cell: row => (
                         // Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
-                        <div>  <button  type="button" onClick={this.showModal}>
-                        open
-                      </button>
-                            <div className={css([Style.ClickButtons, Style.SubCell])} data-value={JSON.stringify(row.original)}>
+                        <div>
+                            <div className={css([Style.ClickButtons, Style.SubCell])} data-value={JSON.stringify(row.original)} onClick={() => this.showModal(this.props.userData, row.original, "APPROVE")}>
+                                Approve
+                        </div>
+                            <div className={css([Style.ClickButtons, Style.SubCell])} data-value={JSON.stringify(row.original)} onClick={() => this.showModal(this.props.userData, row.original, "REVERT")}>
                                 Revert
        </div>
                         </div>
@@ -110,13 +120,15 @@ class RequestTable extends Component {
                     accessor: '',
                     Cell: row => (
                         // Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
-                        <div> <button type="button" class="ClickButtons" onClick={this.showModal}>
-                        open
-                      </button>
-                            <div className={css([Style.ClickButtons, Style.SubCell])} data-value={JSON.stringify(row.original)}>
+                        <div>
+                            <div className={css([Style.ClickButtons, Style.SubCell])} data-value={JSON.stringify(row.original)} onClick={() => this.showModal(this.props.userData, row.original, "FORWARD")} >
+                                Forward
+                                </div>
+                            <div className={css([Style.ClickButtons, Style.SubCell])} data-value={JSON.stringify(row.original)} onClick={() => this.showModal(this.props.userData, row.original, "REVERT")}>
                                 Revert
-           </div>
+       </div>
                         </div>
+
                     )
                 }
 
@@ -204,21 +216,25 @@ class RequestTable extends Component {
             <div>
                 {/* <Modal show={this.state.show} handleClose={this.hideModal}/> */}
                 <>
-      <Button variant="primary" onClick={() => this.showModal()}>
+                    {/* <Button variant="primary" onClick={() => this.showModal()}>
         Launch vertically centered modal
-      </Button>
+      </Button> */}
 
-      <MyVerticallyCenteredModal
-        show={this.state.show}
-        onHide={() => this.hideModal()}
-      />
-    </>
-                
-       
-                {/* <ReactTable striped bordered hover
+                    <CustomModal
+                        show={this.state.show}
+                        userData={this.state.userData}
+                        reqData={this.state.reqData}
+                        action={this.state.action}
+                        actionFunction={(a,b,c)=>this.processLeaveRequest(a,b,c)}
+                        onHide={() => this.hideModal()}
+                    />
+                </>
+
+
+                <ReactTable striped bordered hover
                     data={this.props.leaveReqDetails}
                     columns={columns}
-                /> */}
+                />
 
             </div>
         )

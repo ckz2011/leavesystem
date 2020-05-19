@@ -26,7 +26,8 @@ class FormTab extends Component {
       outstationperm: 'false',
       radiodisplay: 'none',
       leavephoneno: '',
-      employeecode: 'MH00682'
+      employeecode: 'MH00682',
+      lvyear:''
 
     }
   }
@@ -85,7 +86,9 @@ class FormTab extends Component {
       radiodisplay: radiodisplaysetting,
       postapproval: postapprovalstatus,
       postapprovalreq: postapprovalreqstatus,
-      radiodisplayreq: radiodisplayreqsetting
+      radiodisplayreq: radiodisplayreqsetting,
+      lvyear:date.getFullYear()
+
     });
   };
 

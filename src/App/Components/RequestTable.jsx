@@ -41,18 +41,37 @@ class RequestTable extends Component {
             userData: '',
             reqData: '',
             action: '',
-            pageSize: 10
+            pageSize: 10,
+            revRemarks:'',
+            showRevert:'none'
+                  
+            
         };
 
     }
+    setRevremarks=(event)=>{
+        this.setState({
+      
+          revRemarks:event.target.value
 
+        
+        });
+        console.log("revRemarks",this.state.revRemarks);  
+
+    }
 
     showModal = (userData, reqData, action) => {
+        let showrevert='none';
+        if (action=='REVERT')
+        {showrevert='block'; }
+        
         this.setState({
             show: true,
             userData: userData,
             reqData: reqData,
             action: action,
+            showrevert:showrevert,
+          
 
 
 
@@ -63,7 +82,7 @@ class RequestTable extends Component {
         this.setState({ show: false });
     };
 
-    processLeaveRequest = async (userData, reqData, action) => {
+    processLeaveRequest = async (userData, reqData, action,revRemarks) => {
         let url = Constants.BASE_URL + Constants.PROCESSLVREQ_URL;
         console.log(url);
         console.log("Final Params going >> ", userData);
@@ -233,6 +252,8 @@ class RequestTable extends Component {
                         action={this.state.action}
                         actionFunction={(a, b, c) => this.processLeaveRequest(a, b, c)}
                         onHide={() => this.hideModal()}
+                        showRevert={this.state.showRevert}
+                        revertFunction={() =>this.setRevremarks()}
                     />
               
 
@@ -242,6 +263,8 @@ class RequestTable extends Component {
                     columns={columns}
                     showPagination={true}
                     defaultPageSize={this.state.pageSize}
+                  
+
                 />
 
             </div>

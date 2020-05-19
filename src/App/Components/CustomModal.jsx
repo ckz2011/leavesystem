@@ -10,11 +10,10 @@ class CustomModal extends Component {
     constructor(props) {
         super(props)
 
-        this.state = {
-            
-        }
+      
     }
 
+  
     render() {
 
       console.log('in modal ',this.props.userData)
@@ -59,15 +58,20 @@ class CustomModal extends Component {
     <tr>
       <td>Details</td>
       <td>{this.props.reqData.purpose}<br/>
+      {   this.props.reqData.latereason}
+      </td>
+    </tr>
+    <tr style={{ display: this.props.showRevert }}>
+      <td >Remarks on Reverting</td>
+      <td><input type="text" name="revremarks"  onChange={this.props.revertFunction} placeholder="Enter Remarks for Reverting"></input>
       
       </td>
     </tr>
-    
   </tbody>
 </Table>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={()=>{this.props.actionFunction(this.props.userData,this.props.reqData,this.props.action)}}>{this.props.action}</Button>
+          <Button  onClick={()=>{this.props.actionFunction(this.props.userData,this.props.reqData,this.props.action)}}>{this.props.action}</Button>
           <Button onClick={this.props.onHide}>CLOSE</Button>
         </Modal.Footer>
       </Modal>)

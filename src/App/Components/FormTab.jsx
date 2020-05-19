@@ -25,7 +25,8 @@ class FormTab extends Component {
       postaprrovalreq: false,
       outstationperm: 'false',
       radiodisplay: 'none',
-      leavephoneno:''
+      leavephoneno: '',
+      employeecode: 'MH00682'
 
     }
   }
@@ -61,7 +62,7 @@ class FormTab extends Component {
       if ((this.state.endDate).getTime() === date.getTime()) {
         checkboxshowsetting = 'none'
 
-        if (this.state.halfdayfrom ==='true') {
+        if (this.state.halfdayfrom === 'true') {
 
           radiodisplaysetting = 'block'
         }
@@ -190,7 +191,7 @@ class FormTab extends Component {
   }
 
   toHandleHalfday = (event) => {
-   
+
     if ((event.target.checked === true)) {
       this.setState({
         halfdayto: 'true',
@@ -235,12 +236,12 @@ class FormTab extends Component {
 
     });
   }
-  addDays = (date,number) =>{
-    return date+number;
+  addDays = (date, number) => {
+    return date + number;
   }
 
   formatDate = (date, format = 'YYYY-MM-DD') => {
-    return date.getFullYear() + "-" + (date.getMonth() <9 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" + (date.getDate() <=0 ? ("0" + date.getDate()) : date.getDate());
+    return date.getFullYear() + "-" + (date.getMonth() < 9 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" + (date.getDate() <= 0 ? ("0" + date.getDate()) : date.getDate());
   }
 
   modifyDateString = (data) => {
@@ -256,40 +257,55 @@ class FormTab extends Component {
 
   submitHandler = async (event) => {
     event.preventDefault();
+
     console.log(this.state)
     const oneDay = 24 * 60 * 60 * 1000;
-    if (((this.state.endDate - this.state.startDate) / oneDay) > 5) {
-      alert('Maximum 5 Days Leave is allowed')
-      return
-    }
-    if(this.props.shiftType ==='GENERAL')
-    {
-     if(this.state.endDate.getDay()<this.state.startDate.getDay())
-     alert('Leave cannot include Weekends and Holidays')
-      return
-
-    }
+    if (((this.state.endDate - this.state.startDate) / oneDay) > 5) 
+      {
+        alert('Maximum 5 Days Leave is allowed')
+        return
+      }
     
-    else {
-      let url = Constants.BASE_URL + Constants.FORM_URL;
-      console.log(url);
-      console.log("Final Params going >> ", this.state);
+    if (this.props.shiftType === 'GENERAL') {
+      if (this.state.endDate.getDay() < this.state.startDate.getDay()) {
+        alert('Leave cannot include Weekends and Holidays')
+        return
+      }
 
-      let params = this.modifyDateString(this.state);
-      // Ajax Call
-      let response = await axios.post(url, params);
-      if (response.data = true)
-        console.log("Leave applied")
 
+
+      else {
+        let url = Constants.BASE_URL + Constants.FORM_URL;
+        console.log(url);
+        console.log("Final Params going >> ", this.state);
+
+        let params = (this.state);
+        // Ajax Call
+        let response = await axios.post(url, params);
+        if (response.data = true)
+          console.log("Leave applied")
+
+      }
     }
     console.log(this.state)
 
   }
- 
+
 
 
 
   render() {
+
+    // {this.props && this.props.userData && this.state.employeecode==''?
+
+    // this.setState({
+
+    //   employeecode:this.props.userData.employeecode
+    // })
+    // : ''}
+
+    console.log('in form tab', this.props.userData.employeecode)
+
 
 
     const isWeekday = date => {
@@ -312,13 +328,13 @@ class FormTab extends Component {
                     <Form.Label ><b>Leave From :</b> </Form.Label>
                   </Col>
                   <Col>
-                    <DatePicker  required id="leaveFrom" filterDate={weekdayprop} selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleStartDateChange} />
+                    <DatePicker required id="leaveFrom" filterDate={weekdayprop} selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleStartDateChange} />
                   </Col>
                 </Row>
 
                 <Form.Group  >
                   <Row>
-                    <Col><Form.Check type="checkbox" label="Half day"  id="halfDayFrom" onChange={this.fromHandleHalfday} />
+                    <Col><Form.Check type="checkbox" label="Half day" id="halfDayFrom" onChange={this.fromHandleHalfday} />
                     </Col><Col> <Form.Check onChange={this.handleHalfDayTime} type="radio" label="First Half" value="forenoon" name="fromhalf" style={{ display: this.state.radiodisplay }} required={this.state.radiodisplayreq} />
                     </Col> <Col><Form.Check onChange={this.handleHalfDayTime} type="radio" label="Second Half" value="afternoon" name="fromhalf" style={{ display: this.state.radiodisplay }} required={this.state.radiodisplayreq} />
                     </Col>
@@ -345,13 +361,13 @@ class FormTab extends Component {
               <Col colSpan="2">
                 <Form.Check type="checkbox" name="outstationperm" onChange={this.handleStationPerm} id="outstationperm" label="Permission to leave station required" id="halfDayTo" />
                 <Form.Label><b>Address during leave period</b></Form.Label>
-                
+
                 <Form.Control as="textarea" rows="2" required name="address" onChange={this.handleAddress} />
                 <Form.Label><b>Contact no. during leave period</b></Form.Label>
-                <Form.Control type="number"  pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"  required name="leavephoneno" onChange={this.handlePhoneno} />
+                <Form.Control type="number" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required name="leavephoneno" onChange={this.handlePhoneno} />
               </Col>
             </Row>
-            
+
           </Form.Group>
           <Form.Group>
             <Row>
@@ -360,7 +376,7 @@ class FormTab extends Component {
                 <Form.Control required as="textarea" rows="1" name="purpose" onChange={this.handlePurpose} />
               </Col>
             </Row>
-            
+
           </Form.Group>
           <Form.Group style={{ display: this.state.postapproval }}>
             <Row>

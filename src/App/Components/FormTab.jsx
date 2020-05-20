@@ -244,8 +244,12 @@ class FormTab extends Component {
   }
 
   formatDate = (date, format = 'YYYY-MM-DD') => {
-    return date.getFullYear() + "-" + (date.getMonth() < 9 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" + (date.getDate() <= 0 ? ("0" + date.getDate()) : date.getDate());
+    return date.getFullYear() + "-" + (date.getMonth() < 9 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" + (date.getDate() <= 9 ? ("0" + date.getDate()) : date.getDate());
   }
+  formatDateInDDMMYYY = (date, format = 'YYYY-MM-DD') => {
+    return (date.getDate() <= 9 ? ("0" + date.getDate()) : date.getDate())+ "-" + (date.getMonth() < 9 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" +date.getFullYear() ;
+  }
+
 
   modifyDateString = (data) => {
     try {
@@ -260,6 +264,19 @@ class FormTab extends Component {
 
   submitHandler = async (event) => {
     event.preventDefault();
+    // /let   startdateinformat=new Date(this.state.startDate)
+      //  let   datestart = JSON.stringify(this.state.startDate)
+      //   let   startdateinformat =new Date(this.state.startDate.getTime() +(this.state.startDate.getTimezoneOffset() * 60000)).toJSON();
+     //   let   enddateinformat =new Date(this.state.endDate)
+ // let  enddateinformat = JSON.stringify(this.state.endDate)
+        // let  enddateinformat = dateend.slice(1,11)
+
+          // this.setState({
+          //   startDate: startdateinformat,
+          //   endDate:enddateinformat
+    
+          // });
+
 
     console.log(this.state)
     const oneDay = 24 * 60 * 60 * 1000;
@@ -283,8 +300,11 @@ class FormTab extends Component {
         console.log("Final Params going >> ", this.state);
 
         let params = (this.state);
+        params.startDate=this.formatDateInDDMMYYY( params.startDate)
+        params.endDate=this.formatDateInDDMMYYY( params.endDate)
         // Ajax Call
         let response = await axios.post(url, params);
+
         if (response.data = true)
           console.log("Leave applied")
 

@@ -15,7 +15,7 @@ class CustomModal extends Component {
 
   
     render() {
-
+      console.log("in modal revremarks ",this.props.revRemarks)
       console.log('in modal ',this.props.userData)
         return(
         <Modal
@@ -55,6 +55,7 @@ class CustomModal extends Component {
       <td>{this.props.reqData.noofleaves}&nbsp;{this.props.reqData.halfdaytime}</td>
     
     </tr>
+    
     <tr>
       <td>Details</td>
       <td>{this.props.reqData.purpose}<br/>
@@ -62,8 +63,14 @@ class CustomModal extends Component {
       </td>
     </tr>
     <tr>
+      <td>Address and Contact Reason</td>
+      <td>{this.props.reqData.address}<br/>
+      {   this.props.reqData.leavephoneno}
+      </td>
+    </tr>
+    <tr>
       <td  style={{ display: this.props.showRevert }} >Remarks on Reverting</td>
-      <td><input name="revremarks"  style={{ display: this.props.showRevert }} onChange={(e)=>{this.props.revertFunction(e)}} width="100" placeholder="Enter Remarks"/>
+      <td><input type="text" name="revremarks"  style={{ display: this.props.showRevert }} onChange={(e)=>{this.props.revertFunction(e)}} width="100"  placeholder="Enter Remarks"/>
       
       </td>
     </tr>
@@ -71,7 +78,7 @@ class CustomModal extends Component {
 </Table>
         </Modal.Body>
         <Modal.Footer>
-          <Button  onClick={()=>{this.props.actionFunction(this.props.userData,this.props.reqData,this.props.action)}}>{this.props.action}</Button>
+          <Button  onClick={()=>{this.props.actionFunction(this.props.userData,this.props.reqData,this.props.action,this.props.revRemarks)}}>{this.props.action}</Button>
           <Button onClick={this.props.onHide}>CLOSE</Button>
         </Modal.Footer>
       </Modal>)

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import CustomModal from './CustomModal'
+import MessageModal from './MessageModal'
 import ReactTable from 'react-table';
 import { StyleSheet, css } from 'aphrodite'
 import axios from 'axios';
@@ -43,7 +44,9 @@ class RequestTable extends Component {
             action: '',
             pageSize: 10,
             revRemarks:'',
-            showRevert:'none'
+            showRevert:'none',
+            messageShow:false,
+            message:""
                   
             
         };
@@ -53,9 +56,10 @@ class RequestTable extends Component {
         this.setState({
       
           revRemarks:event.target.value
-
+           
         
         });
+        console.log("event",event.target);
         console.log("revRemarks",this.state.revRemarks);  
 
     }
@@ -81,30 +85,52 @@ class RequestTable extends Component {
 
         });
     };
+    showMessageModal = () => {
+        
+        this.setState({
+            messageShow: true
 
+        });
+    };
     hideModal = () => {
         this.setState({ show: false });
     };
+    hideMessageModal = () => {
+        this.setState({ messageShow: false });
+    };
 
-    processLeaveRequest = async (userData, reqData, action,revRemarks) => {
+    processLeaveRequest = async (userData, reqData, action,Remarks) => {
         let url = Constants.BASE_URL + Constants.PROCESSLVREQ_URL;
         console.log(url);
         console.log("Final Params going >> ", userData);
         console.log("Final Params going >> ", reqData);
         console.log("Final Params going >> ", action);
+        console.log("Final Params going >> ", this.state.revRemarks);
         let jsonData = {
             user: userData,
             lvdetails: reqData,
             action: action,
-            revRemarks:revRemarks
+            revRemarks:Remarks
         }
         console.log('jsonData            ', jsonData)
-        // Ajax Call
+        // Ajax Callnp
         let response = await axios.post(url, jsonData);
+        this.setState({ show: false });
+      
         if (response.data) {
-            this.setState({ show: false });
+          
+            this.setState({
+                message:response.data,
+                
+                messageShow: true });
+          
         }
-        console.log("Leave applied")
+        else 
+        this.setState({
+            message:'UNABLE TO CONNECT TO SERVER',
+            
+            messageShow: true });
+          
 
 
     }
@@ -169,7 +195,7 @@ class RequestTable extends Component {
                     accessor: '',
                     Cell: row => (
                         // Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
-                        <div className={css([Style.ClickButtons, Style.SubCell])} data-value={JSON.stringify(row.original)}>
+                        <div className={css([Style.ClickButtons, Style.SubCell])} data-value={JSON.stringify(row.original)} onClick={() => this.showModal(this.props.userData, row.original, "CANCEL")}>
                             Cancel
                         </div>
 
@@ -255,10 +281,19 @@ class RequestTable extends Component {
                         userData={this.state.userData}
                         reqData={this.state.reqData}
                         action={this.state.action}
-                        actionFunction={(a, b, c) => this.processLeaveRequest(a, b, c)}
+                        actionFunction={(a, b, c,d) => this.processLeaveRequest(a, b, c,d)}
                         onHide={() => this.hideModal()}
                         showRevert={this.state.showRevert}
                         revertFunction={this.setRevremarks}
+                        revRemarks={this.state.revRemarks}
+                    />
+
+                    <MessageModal
+                        show={this.state.messageShow}
+                        message={this.state.message}
+                        action={this.state.action}
+                        onHide={() => this.hideMessageModal()}
+                      
                     />
               
 

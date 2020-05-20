@@ -61,9 +61,9 @@ class CustomModal extends Component {
       {   this.props.reqData.latereason}
       </td>
     </tr>
-    <tr style={{ display: this.props.showRevert }}>
-      <td >Remarks on Reverting</td>
-      <td><input type="text" name="revremarks"  onChange={this.props.revertFunction} placeholder="Enter Remarks for Reverting"></input>
+    <tr>
+      <td  style={{ display: this.props.showRevert }} >Remarks on Reverting</td>
+      <td><input name="revremarks"  style={{ display: this.props.showRevert }} onChange={(e)=>{this.props.revertFunction(e)}} width="100" placeholder="Enter Remarks"/>
       
       </td>
     </tr>

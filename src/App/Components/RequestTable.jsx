@@ -62,15 +62,19 @@ class RequestTable extends Component {
 
     showModal = (userData, reqData, action) => {
         let showrevert='none';
+       
         if (action=='REVERT')
-        {showrevert='block'; }
+        {
+           // alert(action)
+            showrevert='block'; 
+        }
         
         this.setState({
             show: true,
             userData: userData,
             reqData: reqData,
             action: action,
-            showrevert:showrevert,
+            showRevert:showrevert
           
 
 
@@ -91,9 +95,10 @@ class RequestTable extends Component {
         let jsonData = {
             user: userData,
             lvdetails: reqData,
-            action: action
+            action: action,
+            revRemarks:revRemarks
         }
-        console.log('jsonData', JSON.stringify(jsonData))
+        console.log('jsonData            ', jsonData)
         // Ajax Call
         let response = await axios.post(url, jsonData);
         if (response.data) {
@@ -253,7 +258,7 @@ class RequestTable extends Component {
                         actionFunction={(a, b, c) => this.processLeaveRequest(a, b, c)}
                         onHide={() => this.hideModal()}
                         showRevert={this.state.showRevert}
-                        revertFunction={() =>this.setRevremarks()}
+                        revertFunction={this.setRevremarks}
                     />
               
 

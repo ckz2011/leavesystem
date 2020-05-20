@@ -264,20 +264,6 @@ class FormTab extends Component {
 
   submitHandler = async (event) => {
     event.preventDefault();
-    // /let   startdateinformat=new Date(this.state.startDate)
-      //  let   datestart = JSON.stringify(this.state.startDate)
-      //   let   startdateinformat =new Date(this.state.startDate.getTime() +(this.state.startDate.getTimezoneOffset() * 60000)).toJSON();
-     //   let   enddateinformat =new Date(this.state.endDate)
- // let  enddateinformat = JSON.stringify(this.state.endDate)
-        // let  enddateinformat = dateend.slice(1,11)
-
-          // this.setState({
-          //   startDate: startdateinformat,
-          //   endDate:enddateinformat
-    
-          // });
-
-
     console.log(this.state)
     const oneDay = 24 * 60 * 60 * 1000;
     if (((this.state.endDate - this.state.startDate) / oneDay) > 5) 
@@ -314,18 +300,18 @@ class FormTab extends Component {
 
   }
 
-
+  addDate(days) {
+    return new Date(new Date() + 1000 * 60 * 60 * 24 * days);
+ }
+ 
+ subDays(days) {
+  return new Date(new Date() - 1000 * 60 * 60 * 24 * days);
+}
 
 
   render() {
 
-    // {this.props && this.props.userData && this.state.employeecode==''?
-
-    // this.setState({
-
-    //   employeecode:this.props.userData.employeecode
-    // })
-    // : ''}
+   
 
     console.log('in form tab', this.props.userData.employeecode)
 
@@ -351,7 +337,7 @@ class FormTab extends Component {
                     <Form.Label ><b>Leave From :</b> </Form.Label>
                   </Col>
                   <Col>
-                    <DatePicker required id="leaveFrom" filterDate={weekdayprop} selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleStartDateChange} />
+                    <DatePicker required id="leaveFrom" maxDate={this.subDays(-15)} minDate={this.subDays(15)} filterDate={weekdayprop} selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleStartDateChange} />
                   </Col>
                 </Row>
 
@@ -372,7 +358,7 @@ class FormTab extends Component {
                     <Form.Label ><b>Leave To :</b></Form.Label>
                   </Col>
                   <Col>
-                    <DatePicker required id="leaveTo" filterDate={weekdayprop} selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleEndDateChange} minDate={this.state.startDate} />
+                    <DatePicker required id="leaveTo" filterDate={weekdayprop} selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleEndDateChange} minDate={this.state.startDate} maxDate={this.subDays(-21)}/>
                   </Col>
                 </Row>
                 <Form.Check type="checkbox" label="Half day" id="halfDayTo" style={{ display: this.state.checkboxdisplay }} onChange={this.toHandleHalfday} />

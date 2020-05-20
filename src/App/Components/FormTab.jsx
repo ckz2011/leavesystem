@@ -3,6 +3,7 @@ import { Form, Jumbotron, Row, Col, Button } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import Constants from '../Config/core';
 import axios from 'axios';
+import MessageModal from './MessageModal'
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -27,13 +28,19 @@ class FormTab extends Component {
       radiodisplay: 'none',
       leavephoneno: '',
       employeecode: 'MH00682',
-      lvyear:''
+      lvyear:'',
+      messageShow:true,
+      message:""
 
     }
   }
   componentDidMount() {
     console.log("ddd")
   }
+  hideMessageModal = () => {
+    this.setState({ messageShow: false });
+};
+
 
   handleStartDateChange = date => {
     let postapprovalstatus = 'none'
@@ -291,14 +298,23 @@ class FormTab extends Component {
         // Ajax Call
         let response = await axios.post(url, params);
 
-        if (response.data = true)
-          console.log("Leave applied")
+        if (response.data)
+        {
+
+          this.setState({
+            message:response.data,
+            
+            messageShow: true });
+            console.log(response.data)
+      
+    }
+        
+        }
 
       }
     }
-    console.log(this.state)
-
-  }
+  
+  
 
   addDate(days) {
     return new Date(new Date() + 1000 * 60 * 60 * 24 * days);
@@ -403,6 +419,13 @@ class FormTab extends Component {
           </div>
 
         </Form>
+        <MessageModal
+                        show={this.state.messageShow}
+                        message={this.state.message}
+                        action={'apply'}
+                        onHide={() => this.hideMessageModal()}
+                      
+                    />
       </Jumbotron>
     );
   }

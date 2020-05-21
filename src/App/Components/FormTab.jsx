@@ -28,9 +28,10 @@ class FormTab extends Component {
       radiodisplay: 'none',
       leavephoneno: '',
       employeecode: 'MH00682',
-      lvyear:'',
-      messageShow:true,
-      message:""
+      lvyear: '',
+      messageShow: true,
+      message: "",
+      check:""
 
     }
   }
@@ -39,7 +40,7 @@ class FormTab extends Component {
   }
   hideMessageModal = () => {
     this.setState({ messageShow: false });
-};
+  };
 
 
   handleStartDateChange = date => {
@@ -94,7 +95,7 @@ class FormTab extends Component {
       postapproval: postapprovalstatus,
       postapprovalreq: postapprovalreqstatus,
       radiodisplayreq: radiodisplayreqsetting,
-      lvyear:date.getFullYear()
+      lvyear: date.getFullYear()
 
     });
   };
@@ -254,7 +255,7 @@ class FormTab extends Component {
     return date.getFullYear() + "-" + (date.getMonth() < 9 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" + (date.getDate() <= 9 ? ("0" + date.getDate()) : date.getDate());
   }
   formatDateInDDMMYYY = (date, format = 'YYYY-MM-DD') => {
-    return (date.getDate() <= 9 ? ("0" + date.getDate()) : date.getDate())+ "-" + (date.getMonth() < 9 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" +date.getFullYear() ;
+    return (date.getDate() <= 9 ? ("0" + date.getDate()) : date.getDate()) + "-" + (date.getMonth() < 9 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" + date.getFullYear();
   }
 
 
@@ -271,14 +272,14 @@ class FormTab extends Component {
 
   submitHandler = async (event) => {
     event.preventDefault();
+   // event.stopPropagation();
     console.log(this.state)
     const oneDay = 24 * 60 * 60 * 1000;
-    if (((this.state.endDate - this.state.startDate) / oneDay) > 5) 
-      {
-        alert('Maximum 5 Days Leave is allowed')
-        return
-      }
-    
+    if (((this.state.endDate - this.state.startDate) / oneDay) > 5) {
+      alert('Maximum 5 Days Leave is allowed')
+      return
+    }
+
     if (this.props.shiftType === 'GENERAL') {
       if (this.state.endDate.getDay() < this.state.startDate.getDay()) {
         alert('Leave cannot include Weekends and Holidays')
@@ -291,43 +292,47 @@ class FormTab extends Component {
         let url = Constants.BASE_URL + Constants.FORM_URL;
         console.log(url);
         console.log("Final Params going >> ", this.state);
-
-        let params = (this.state);
-        params.startDate=this.formatDateInDDMMYYY( params.startDate)
-        params.endDate=this.formatDateInDDMMYYY( params.endDate)
+ 
+        let params = this.state;
+        params.startDate = this.formatDateInDDMMYYY(params.startDate)
+        params.endDate = this.formatDateInDDMMYYY(params.endDate)
         // Ajax Call
         let response = await axios.post(url, params);
 
-        if (response.data)
-        {
+        if (response && response.data) {
+
+          console.log('response   njnj', response.data)
 
           this.setState({
-            message:response.data,
-            
-            messageShow: true });
-            console.log(response.data)
-      
-    }
-        
+            // message: response.data,
+
+            // messageShow: true
+
+            check:'ok'
+          });
+          console.log(response.data)
+
         }
 
       }
+
     }
-  
-  
+  }
+
+
 
   addDate(days) {
     return new Date(new Date() + 1000 * 60 * 60 * 24 * days);
- }
- 
- subDays(days) {
-  return new Date(new Date() - 1000 * 60 * 60 * 24 * days);
-}
+  }
+
+  subDays(days) {
+    return new Date(new Date() - 1000 * 60 * 60 * 24 * days);
+  }
 
 
   render() {
 
-   
+
 
     console.log('in form tab', this.props.userData.employeecode)
 
@@ -343,7 +348,7 @@ class FormTab extends Component {
     return (
 
       <Jumbotron style={{ paddingBottom: '3%', paddingTop: '4%', boxShadow: '2px 4px #bbedb9', border: '1px solid #bbedb9' }}>
-        <Form onSubmit={this.submitHandler}>
+        <Form>
           <h4 style={{ textAlign: 'center' }}>Leave Details</h4>
           <Row>
             <Col>
@@ -374,7 +379,7 @@ class FormTab extends Component {
                     <Form.Label ><b>Leave To :</b></Form.Label>
                   </Col>
                   <Col>
-                    <DatePicker required id="leaveTo" filterDate={weekdayprop} selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleEndDateChange} minDate={this.state.startDate} maxDate={this.subDays(-21)}/>
+                    <DatePicker required id="leaveTo" filterDate={weekdayprop} selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleEndDateChange} minDate={this.state.startDate} maxDate={this.subDays(-21)} />
                   </Col>
                 </Row>
                 <Form.Check type="checkbox" label="Half day" id="halfDayTo" style={{ display: this.state.checkboxdisplay }} onChange={this.toHandleHalfday} />
@@ -413,19 +418,19 @@ class FormTab extends Component {
           </Form.Group>
 
           <div style={{ textAlign: 'center' }}>
-            <Button variant="success" type="submit" >
+            <Button variant="success" type="button"  onClick={this.submitHandler}>
               Submit Leave Request
               </Button>
           </div>
 
         </Form>
         <MessageModal
-                        show={this.state.messageShow}
-                        message={this.state.message}
-                        action={'apply'}
-                        onHide={() => this.hideMessageModal()}
-                      
-                    />
+          show={this.state.messageShow}
+          message={this.state.message}
+          action={'apply'}
+          onHide={() => this.hideMessageModal()}
+
+        />
       </Jumbotron>
     );
   }

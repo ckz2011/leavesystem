@@ -28,9 +28,9 @@ render() {
     <Tab eventKey="genShift" title="General Shift"  >
     <FormTab weekday={true} userData={this.props.userData} shiftType = "GENERAL" />
     </Tab>
-    <Tab eventKey="shifOps" title="Shift Operations"  >
+    {/* <Tab eventKey="shifOps" title="Shift Operations"  >
     <FormTab weekday={false} userData={this.props.userData} shiftType = "SHIFTS" />
-    </Tab>
+    </Tab> */}
    
   </Tabs>
   </Container>

@@ -23,16 +23,18 @@ render() {
 
     <Container style={{ justifyContent: 'center', width: '80%', marginTop: "1%" }}>
    
-    <Tabs variant='tabs'  defaultActiveKey="genShift" id="uncontrolled-tab-example">
+    {/* <Tabs variant='tabs'  defaultActiveKey="genShift" id="uncontrolled-tab-example"> */}
        
-    <Tab eventKey="genShift" title="General Shift"  >
+    {/* <Tab eventKey="genShift" title="General Shift"  > */}
     <FormTab weekday={true} userData={this.props.userData} shiftType = "GENERAL" />
-    </Tab>
+    {/* </Tab> */}
     {/* <Tab eventKey="shifOps" title="Shift Operations"  >
     <FormTab weekday={false} userData={this.props.userData} shiftType = "SHIFTS" />
     </Tab> */}
    
-  </Tabs>
+  {/* </Tabs> */}
+
+  
   </Container>
   )
 }

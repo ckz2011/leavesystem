@@ -38,6 +38,14 @@ class FormTab extends Component {
   componentDidMount() {
     console.log("ddd")
   }
+  showMessageModal = (message) => {
+  
+    this.setState({
+        messageShow: true,
+       message:message
+      
+    });
+  };
   hideMessageModal = () => {
     this.setState({ messageShow: false });
   };
@@ -261,8 +269,12 @@ class FormTab extends Component {
 
   modifyDateString = (data) => {
     try {
-      data.startDate = data.startDate !== '' ? this.formatDate(data.startDate) : ''
-      data.endDate = data.endDate !== '' ? this.formatDate(data.endDate) : ''
+    //  data.startDate = data.startDate !== '' ? this.formatDate(data.startDate) : ''
+   //   data.endDate = data.endDate !== '' ? this.formatDate(data.endDate) : ''
+   data.startDate = data.startDate !== '' ? (data.startDate).toUTCString() : ''
+     data.endDate = data.endDate !== '' ? (data.endDate).toUTCString() : ''
+
+   
       return data;
     } catch (e) {
       console.error("Failed to convert Date to String >> ", e);
@@ -282,41 +294,45 @@ class FormTab extends Component {
 
     if (this.props.shiftType === 'GENERAL') {
       if (this.state.endDate.getDay() < this.state.startDate.getDay()) {
-        alert('Leave cannot include Weekends and Holidays')
+
+        this.setState({
+          messageShow: true,
+         message:'Leave cannot include Weekends and Holidays'
+        
+      });
+      //  alert('Leave cannot include Weekends and Holidays')
         return
       }
+    }
 
 
 
-      else {
+    
         let url = Constants.BASE_URL + Constants.FORM_URL;
         console.log(url);
         console.log("Final Params going >> ", this.state);
  
         let params = this.state;
-        params.startDate = this.formatDateInDDMMYYY(params.startDate)
-        params.endDate = this.formatDateInDDMMYYY(params.endDate)
+        let self = this;
+        // params.startDate = this.formatDateInDDMMYYY(params.startDate)
+        // params.endDate = this.formatDateInDDMMYYY(params.endDate)
+         params.startDate = this.modifyDateString(params.startDate)
+        params.endDate = this.modifyDateString(params.endDate)
+        
         // Ajax Call
-        let response = await axios.post(url, params);
+        let response = await axios.post(url, params).then((response) => {
+          console.log(response);
+          this.setState({ messageShow: true,
+            message:response.data})
+        })
+       .catch((error)=>{
+          console.log(error);
+       });
+            
 
-        if (response && response.data) {
+    return;
 
-          console.log('response   njnj', response.data)
-
-          this.setState({
-            // message: response.data,
-
-            // messageShow: true
-
-            check:'ok'
-          });
-          console.log(response.data)
-
-        }
-
-      }
-
-    }
+  
   }
 
 

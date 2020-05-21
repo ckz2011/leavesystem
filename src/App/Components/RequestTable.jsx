@@ -96,6 +96,7 @@ class RequestTable extends Component {
         this.setState({ show: false });
     };
     hideMessageModal = () => {
+       
         this.setState({ messageShow: false });
     };
 

@@ -265,14 +265,18 @@ class FormTab extends Component {
   formatDateInDDMMYYY = (date, format = 'YYYY-MM-DD') => {
     return (date.getDate() <= 9 ? ("0" + date.getDate()) : date.getDate()) + "-" + (date.getMonth() < 9 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" + date.getFullYear();
   }
-
+convertGMTtoIST=(date)=>
+{
+  
+return new Date(date.getTime() + 5.5 * 60 * 60 * 1000)
+}
 
   modifyDateString = (data) => {
     try {
-    //  data.startDate = data.startDate !== '' ? this.formatDate(data.startDate) : ''
-   //   data.endDate = data.endDate !== '' ? this.formatDate(data.endDate) : ''
-   data.startDate = data.startDate !== '' ? (data.startDate).toUTCString() : ''
-     data.endDate = data.endDate !== '' ? (data.endDate).toUTCString() : ''
+      data.startDate = data.startDate !== '' ? this.convertGMTtoIST(data.startDate) : ''
+      data.endDate = data.endDate !== '' ? this.convertGMTtoIST(data.endDate) : ''
+  // data.startDate = data.startDate !== '' ?data.startDate.toLocalString(): ''
+  //   data.endDate = data.endDate !== '' ?data.endDate.toLocalString() : ''
 
    
       return data;
@@ -294,7 +298,7 @@ class FormTab extends Component {
 
     if (this.props.shiftType === 'GENERAL') {
       if (this.state.endDate.getDay() < this.state.startDate.getDay()) {
-
+       
         this.setState({
           messageShow: true,
          message:'Leave cannot include Weekends and Holidays'
@@ -316,8 +320,8 @@ class FormTab extends Component {
         let self = this;
         // params.startDate = this.formatDateInDDMMYYY(params.startDate)
         // params.endDate = this.formatDateInDDMMYYY(params.endDate)
-         params.startDate = this.modifyDateString(params.startDate)
-        params.endDate = this.modifyDateString(params.endDate)
+        this.modifyDateString(params)
+       // params.endDate = this.modifyDateString(params.endDate)
         
         // Ajax Call
         let response = await axios.post(url, params).then((response) => {

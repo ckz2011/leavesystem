@@ -92,6 +92,9 @@ class RequestTable extends Component {
 
         });
     };
+
+    // resetForm = () => { this.setState({startDate: "", endDate: "", message: ""}); }
+
     hideModal = () => {
         this.setState({ show: false });
     };
@@ -139,6 +142,8 @@ class RequestTable extends Component {
 
 
     render() {
+
+       
         const data = this.props.leaveReqDetails
         let actions;
         let applyingemployee;

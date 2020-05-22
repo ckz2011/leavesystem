@@ -4,6 +4,8 @@ import DatePicker from "react-datepicker";
 import Constants from '../Config/core';
 import axios from 'axios';
 import MessageModal from './MessageModal'
+import ReactDOM from 'react-dom'
+
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -29,9 +31,10 @@ class FormTab extends Component {
       leavephoneno: '',
       employeecode: 'MH00682',
       lvyear: '',
-      messageShow: true,
+      messageShow: false,
       message: "",
-      check:""
+      check: "",
+    
 
     }
   }
@@ -39,21 +42,36 @@ class FormTab extends Component {
     console.log("ddd")
   }
   showMessageModal = (message) => {
-  
+
     this.setState({
-        messageShow: true,
-       message:message
-      
+      messageShow: true,
+      message: message
+
     });
   };
   hideMessageModal = () => {
     this.setState({ messageShow: false });
   };
+  resetForm = () => {
+    const stateFormFields = ["startDate", "endDate", "halfdayfrom",
+      "halfdaytime", "halfdayto", "address", "purpose",
+      "postapprovalval",
+      "postapproval", , "outstationperm",
+      "leavephoneno",
+      "lvyear", "messageShow", "message"]
+    stateFormFields.map(e => this.setState({ e: "" }))
+  }
 
 
   handleStartDateChange = date => {
     let postapprovalstatus = 'none'
     let postapprovalreqstatus = false
+
+    
+    if (date === ''|| date==null) {
+     
+      return
+    }
     if (date > new Date()) {
       postapprovalstatus = 'none'
       postapprovalreqstatus = false
@@ -161,11 +179,19 @@ class FormTab extends Component {
   };
 
   handleEndDateChange = date => {
+     
+    if (date === ''|| date==null) {
+     
+      return
+    }
 
     if (this.state.startDate === '') {
       alert('Please select Start Date');
       return
     }
+
+
+
 
     const oneDay = 24 * 60 * 60 * 1000;
     if (((date - this.state.startDate) / oneDay) > 5) {
@@ -243,10 +269,24 @@ class FormTab extends Component {
     });
   }
   handlePhoneno = (event) => {
+
+  
+  //     let isValidPhoneNumber = validator.isMobilePhone(event.target.value)
+  //    if( isValidPhoneNumber)
+  {
     this.setState({
       leavephoneno: event.target.value,
 
     });
+  }
+  // else
+  // // {
+  //   this.setState({
+  //    messageShow: true,
+  //    message:'Enter Valid Phone number'
+
+  //   });
+  // }
   }
 
   handlePostApproval = (event) => {
@@ -265,20 +305,19 @@ class FormTab extends Component {
   formatDateInDDMMYYY = (date, format = 'YYYY-MM-DD') => {
     return (date.getDate() <= 9 ? ("0" + date.getDate()) : date.getDate()) + "-" + (date.getMonth() < 9 ? ("0" + (date.getMonth() + 1)) : (date.getMonth() + 1)) + "-" + date.getFullYear();
   }
-convertGMTtoIST=(date)=>
-{
-  
-return new Date(date.getTime() + 5.5 * 60 * 60 * 1000)
-}
+  convertGMTtoIST = (date) => {
+
+    return new Date(date.getTime() + 5.5 * 60 * 60 * 1000)
+  }
 
   modifyDateString = (data) => {
     try {
       data.startDate = data.startDate !== '' ? this.convertGMTtoIST(data.startDate) : ''
       data.endDate = data.endDate !== '' ? this.convertGMTtoIST(data.endDate) : ''
-  // data.startDate = data.startDate !== '' ?data.startDate.toLocalString(): ''
-  //   data.endDate = data.endDate !== '' ?data.endDate.toLocalString() : ''
+      // data.startDate = data.startDate !== '' ?data.startDate.toLocalString(): ''
+      //   data.endDate = data.endDate !== '' ?data.endDate.toLocalString() : ''
 
-   
+
       return data;
     } catch (e) {
       console.error("Failed to convert Date to String >> ", e);
@@ -287,8 +326,9 @@ return new Date(date.getTime() + 5.5 * 60 * 60 * 1000)
   }
 
   submitHandler = async (event) => {
+
     event.preventDefault();
-   // event.stopPropagation();
+    // event.stopPropagation();
     console.log(this.state)
     const oneDay = 24 * 60 * 60 * 1000;
     if (((this.state.endDate - this.state.startDate) / oneDay) > 5) {
@@ -298,45 +338,47 @@ return new Date(date.getTime() + 5.5 * 60 * 60 * 1000)
 
     if (this.props.shiftType === 'GENERAL') {
       if (this.state.endDate.getDay() < this.state.startDate.getDay()) {
-       
+
         this.setState({
           messageShow: true,
-         message:'Leave cannot include Weekends and Holidays'
-        
-      });
-      //  alert('Leave cannot include Weekends and Holidays')
+          message: 'Leave cannot include Weekends and Holidays'
+
+        });
+        //  alert('Leave cannot include Weekends and Holidays')
         return
       }
     }
+    let url = Constants.BASE_URL + Constants.FORM_URL;
+    console.log(url);
+    console.log("Final Params going >> ", this.state);
 
+    let params = this.state;
+    let self = this;
+    // params.startDate = this.formatDateInDDMMYYY(params.startDate)
+    // params.endDate = this.formatDateInDDMMYYY(params.endDate)
+    this.modifyDateString(params)
+    // params.endDate = this.modifyDateString(params.endDate)
+    // Ajax Call
+    let response = await axios.post(url, params).then((response) => {
+      console.log(response);
+      this.setState({
+        messageShow: true,
+        message: response.data
+      })
 
+      ReactDOM.findDOMNode(this.leaveForm).reset();
+      ReactDOM.findDOMNode(this.datepickerTo).value='';
+      ReactDOM.findDOMNode(this.datepickerFrom).value='';
 
-    
-        let url = Constants.BASE_URL + Constants.FORM_URL;
-        console.log(url);
-        console.log("Final Params going >> ", this.state);
- 
-        let params = this.state;
-        let self = this;
-        // params.startDate = this.formatDateInDDMMYYY(params.startDate)
-        // params.endDate = this.formatDateInDDMMYYY(params.endDate)
-        this.modifyDateString(params)
-       // params.endDate = this.modifyDateString(params.endDate)
-        
-        // Ajax Call
-        let response = await axios.post(url, params).then((response) => {
-          console.log(response);
-          this.setState({ messageShow: true,
-            message:response.data})
-        })
-       .catch((error)=>{
-          console.log(error);
-       });
-            
+    })
+      .catch((error) => {
+        console.log(error);
+      });
+
 
     return;
 
-  
+
   }
 
 
@@ -351,6 +393,11 @@ return new Date(date.getTime() + 5.5 * 60 * 60 * 1000)
 
 
   render() {
+
+   
+
+
+
 
 
 
@@ -368,18 +415,22 @@ return new Date(date.getTime() + 5.5 * 60 * 60 * 1000)
     return (
 
       <Jumbotron style={{ paddingBottom: '3%', paddingTop: '4%', boxShadow: '2px 4px #bbedb9', border: '1px solid #bbedb9' }}>
-        <Form>
-          <h4 style={{ textAlign: 'center' }}>Leave Details</h4>
+        <Form onSubmit={this.submitHandler} ref={form=>this.leaveForm=form}>
+      
+       
+          <h4  style={{ textAlign: 'center' }}>Leave Application Form</h4><br/>
+          
+        
           <Row>
             <Col>
               <Form.Group>
                 <Row>
-                  <Col>
-                    <Form.Label ><b>Leave From :</b> </Form.Label>
+                  <Col colSpan='2'>
+                    <Form.Label ><b>Leave From : </b> </Form.Label>&nbsp;&nbsp;&nbsp;
+                 
+                    <DatePicker className="form-control" required  id="leaveFrom" maxDate={this.subDays(-15)} minDate={this.subDays(15)} filterDate={weekdayprop} selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleStartDateChange} />
                   </Col>
-                  <Col>
-                    <DatePicker required id="leaveFrom" maxDate={this.subDays(-15)} minDate={this.subDays(15)} filterDate={weekdayprop} selected={this.state.startDate} selectsStart startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleStartDateChange} />
-                  </Col>
+                 
                 </Row>
 
                 <Form.Group  >
@@ -395,11 +446,10 @@ return new Date(date.getTime() + 5.5 * 60 * 60 * 1000)
             <Col>
               <Form.Group>
                 <Row>
-                  <Col>
-                    <Form.Label ><b>Leave To :</b></Form.Label>
-                  </Col>
-                  <Col>
-                    <DatePicker required id="leaveTo" filterDate={weekdayprop} selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleEndDateChange} minDate={this.state.startDate} maxDate={this.subDays(-21)} />
+                  <Col colSpan='2'   style={{ float: 'right' }}>
+                    <Form.Label ><b>Leave To :</b></Form.Label>&nbsp;&nbsp;&nbsp;
+                
+                    <DatePicker className="form-control" required id="leaveTo" filterDate={weekdayprop} selected={this.state.endDate} selectsEnd startDate={this.state.startDate} endDate={this.state.endDate} dateFormat="dd/MM/yyyy" onChange={this.handleEndDateChange} minDate={this.state.startDate} maxDate={this.subDays(-21)} />
                   </Col>
                 </Row>
                 <Form.Check type="checkbox" label="Half day" id="halfDayTo" style={{ display: this.state.checkboxdisplay }} onChange={this.toHandleHalfday} />
@@ -413,9 +463,13 @@ return new Date(date.getTime() + 5.5 * 60 * 60 * 1000)
                 <Form.Label><b>Address during leave period</b></Form.Label>
 
                 <Form.Control as="textarea" rows="2" required name="address" onChange={this.handleAddress} />
-                <Form.Label><b>Contact no. during leave period</b></Form.Label>
-                <Form.Control type="number" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required name="leavephoneno" onChange={this.handlePhoneno} />
+               </Col>
+                </Row><Row>
+                  <Col>
+                <Form.Label><b>Contact Mobile no.</b></Form.Label>
+                <Form.Control type="text" required  name="leavephoneno" pattern="^[0-9]{10}$"  onInvalid="this.setCustomValidity('Enter valid mobile number')" onInput="this.setCustomValidity('')" onChange={this.handlePhoneno} />
               </Col>
+              <Col></Col>
             </Row>
 
           </Form.Group>
@@ -432,13 +486,13 @@ return new Date(date.getTime() + 5.5 * 60 * 60 * 1000)
             <Row>
               <Col colSpan="2">
                 <Form.Label ><b>Reason for post approval</b></Form.Label>
-                <Form.Control as="textarea" required={this.state.postapprovalreq} rows="1" name="postapproval" onChange={this.handlePostApproval} />
+                <Form.Control as="textarea"  required={this.state.postapprovalreq} rows="1" name="postapproval" onChange={this.handlePostApproval} />
               </Col>
             </Row>
           </Form.Group>
 
           <div style={{ textAlign: 'center' }}>
-            <Button variant="success" type="button"  onClick={this.submitHandler}>
+            <Button variant="success" type="submit" >
               Submit Leave Request
               </Button>
           </div>

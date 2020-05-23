@@ -82,10 +82,6 @@ class FormTab extends Component {
     }
 
 
-    if (date > (this.state.endDate) && (this.state.endDate) !== '') {
-      alert('Start date cannot be after end date')
-      return;
-    }
 
 
     let checkboxshowsetting = 'none'
@@ -133,8 +129,14 @@ class FormTab extends Component {
     let checkboxshowsetting = 'none'
     let radiodisplayreqsetting = false
     if ((this.state.startDate === '') || (this.state.endDate === '')) {
-      alert('Please select Start Date and End Date');
-      halfdayfromsetting = 'true'
+      this.setState({
+        messageShow: true,
+          message: 'Please select Start Date and End Date'
+  
+        });
+        halfdayfromsetting = 'true'
+     
+     
     }
     else {
       if ((event.target.checked === true)) {
@@ -186,19 +188,16 @@ class FormTab extends Component {
     }
 
     if (this.state.startDate === '') {
-      alert('Please select Start Date');
+      this.setState({
+      messageShow: true,
+        message: 'Please select Start Date'
+
+      });
+   
       return
     }
-
-
-
-
     const oneDay = 24 * 60 * 60 * 1000;
-    if (((date - this.state.startDate) / oneDay) > 5) {
-      alert('Maximum 5 Days Leave is allowed')
-      return
-    }
-
+ 
     let checkboxshowsetting = 'block'
     let radiodisplaysetting = 'block'
     let radiodisplayreqsetting = true
@@ -332,8 +331,24 @@ class FormTab extends Component {
     console.log(this.state)
     const oneDay = 24 * 60 * 60 * 1000;
     if (((this.state.endDate - this.state.startDate) / oneDay) > 5) {
-      alert('Maximum 5 Days Leave is allowed')
+      this.setState({
+        messageShow: true,
+        message: 'Maximum 5 Days leave period is allowed'
+
+      });
+    
       return
+    }
+
+    
+    if ((this.state.startDate > this.state.endDate)) {
+
+      this.setState({
+        messageShow: true,
+        message: 'Start date cannot be after end date'
+
+      });
+      return;
     }
 
     if (this.props.shiftType === 'GENERAL') {
@@ -415,7 +430,7 @@ class FormTab extends Component {
     return (
 
       <Jumbotron style={{ paddingBottom: '3%', paddingTop: '4%', boxShadow: '2px 4px #bbedb9', border: '1px solid #bbedb9' }}>
-        <Form onSubmit={(e) => { if (window.confirm('Do you want to sumit your Leave ??')) this.submitHandler(e) } }    ref={form=>this.leaveForm=form}>
+        <Form onSubmit={ this.submitHandler}>
       
        
           <h4  style={{ textAlign: 'center' }}>Leave Application Form</h4><br/>

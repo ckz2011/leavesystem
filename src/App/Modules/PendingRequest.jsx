@@ -22,6 +22,12 @@ class ViewRequests extends Component {
 
     
     componentDidMount = async () => {
+        this.loadRequestDetails();
+    }
+
+
+    loadRequestDetails= async () =>
+    {
         try {
 
             let url = Constants.BASE_URL + Constants.PENDINGLVREQ_URL;
@@ -50,19 +56,15 @@ class ViewRequests extends Component {
 
             console.log(e);
         }
-    };
+
+    }
 
     render() {
         console.log('in view request', this.props.userData)
-   
-
-       
-
-
 
         return (
             <Container  fluid style={{marginLeft:'0px',marginTop:'5px'}}>
-             <RequestTable userData={this.props.userData} role={this.props.userData.userrole}  leaveReqDetails={this.state.leaveReqDetails}></RequestTable>
+             <RequestTable userData={this.props.userData} role={this.props.userData.userrole}  leaveReqDetails={this.state.leaveReqDetails}  loadRequestDetails={()=>this.loadRequestDetails()}></RequestTable>
             </Container>
         )
     }

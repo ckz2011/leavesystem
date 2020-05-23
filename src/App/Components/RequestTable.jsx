@@ -5,7 +5,7 @@ import ReactTable from 'react-table';
 import { StyleSheet, css } from 'aphrodite'
 import axios from 'axios';
 import Constants from '../Config/core';
-import { Tooltip,OverlayTrigger } from 'react-bootstrap'
+import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 
 const Style = StyleSheet.create({
     ClickButtons: {
@@ -44,55 +44,56 @@ class RequestTable extends Component {
             reqData: '',
             action: '',
             pageSize: 10,
-            revRemarks:'',
-            showRevert:'none',
-            messageShow:false,
-            message:""
-                  
-            
+            revRemarks: '',
+            showRevert: 'none',
+            messageShow: false,
+            message: ""
+
+
         };
-        
-
-    }
-    componentDidMount(){
 
 
     }
-    setRevremarks=(event)=>{
+    componentDidMount() {
+
+
+    }
+    setRevremarks = (event) => {
+        console.log("Revert function called")
+
         this.setState({
-      
-          revRemarks:event.target.value
-           
-        
+
+            revRemarks: event.target.value
+
+
         });
-        console.log("event",event.target);
-        console.log("revRemarks",this.state.revRemarks);  
+        console.log("event", event.target);
+        console.log("revRemarks", this.state.revRemarks);
 
     }
 
     showModal = (userData, reqData, action) => {
-        let showrevert='none';
-       
-        if (action=='REVERT')
-        {
-           // alert(action)
-            showrevert='block'; 
+        let showrevert = 'none';
+
+        if (action == 'REVERT') {
+            // alert(action)
+            showrevert = 'block';
         }
-        
+
         this.setState({
             show: true,
             userData: userData,
             reqData: reqData,
             action: action,
-            showRevert:showrevert
-          
+            showRevert: showrevert
+
 
 
 
         });
     };
     showMessageModal = () => {
-        
+
         this.setState({
             messageShow: true
 
@@ -105,61 +106,74 @@ class RequestTable extends Component {
         this.setState({ show: false });
     };
     hideMessageModal = () => {
-       
+
         this.setState({ messageShow: false });
     };
 
-    processLeaveRequest = async (userData, reqData, action,Remarks) => {
+    processLeaveRequest = async (userData, reqData, action, Remarks) => {
         let url = Constants.BASE_URL + Constants.PROCESSLVREQ_URL;
         console.log(url);
         console.log("Final Params going >> ", userData);
         console.log("Final Params going >> ", reqData);
         console.log("Final Params going >> ", action);
         console.log("Final Params going >> ", this.state.revRemarks);
+        if (action == 'REVERT' && (this.state.revRemarks == null || this.state.revRemarks == "")) {
+            this.setState({
+
+                messageShow: true,
+                message: 'Please provide reason for reverting'
+
+
+            });
+            return;
+
+        }
         let jsonData = {
             user: userData,
             lvdetails: reqData,
             action: action,
-            revRemarks:Remarks
+            revRemarks: Remarks
         }
         console.log('jsonData            ', jsonData)
         // Ajax Callnp
         let response = await axios.post(url, jsonData);
         this.setState({ show: false });
-      
+
         if (response.data) {
 
-          
-          
+
+
             this.setState({
-                message:response.data,
-                
-                messageShow: true });
-                this.props.loadRequestDetails()
-               
+                message: response.data,
+
+                messageShow: true
+            });
+            this.props.loadRequestDetails()
+
         }
-        else 
-        this.setState({
-            message:'UNABLE TO CONNECT TO SERVER',
-            
-            messageShow: true });
-          
+        else
+            this.setState({
+                message: 'UNABLE TO CONNECT TO SERVER',
+
+                messageShow: true
+            });
+
 
 
     }
-    renderTooltip=(props)=> {
+    renderTooltip = (props) => {
         return (
-          <Tooltip id="button-tooltip" {...props}>
-            Forwaded/Approved requests will require permission of respective officer for cancellation
-          </Tooltip>
+            <Tooltip id="button-tooltip" {...props}>
+                Forwaded/Approved requests will require permission of respective officer for cancellation
+            </Tooltip>
         );
-      }
-      
+    }
+
 
 
     render() {
 
-       
+
         const data = this.props.leaveReqDetails
         let actions;
         let applyingemployee;
@@ -181,8 +195,10 @@ class RequestTable extends Component {
                         </div>
                     )
                 }
+
                 applyingemployee = {
                     Header: 'Employee name',
+
                     accessor: 'employeename'
                 }
                 break;
@@ -207,7 +223,14 @@ class RequestTable extends Component {
 
                 applyingemployee = {
                     Header: 'Employee name',
-                    accessor: 'employeename'
+                    accessor: 'employeename',
+
+                    Filter: ({ filter, onChange }) => (
+                        <input type="search" style={{ border: '1px solid rgb(116, 230, 30)', width: "120px" }} placeholder="Name" onChange={event => onChange(event.target.value)} />
+                    ),
+
+                    filterMethod: (filter, row) => (row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase())),
+                    filterable: true
                 }
                 break;
             case 'employee':
@@ -217,13 +240,13 @@ class RequestTable extends Component {
                     accessor: '',
                     Cell: row => (
                         <OverlayTrigger
-                        placement="bottom"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={this.renderTooltip}
-                      >
-                       
-                        <div className={css([Style.ClickButtons, Style.SubCell])} data-value={JSON.stringify(row.original)} onClick={() => this.showModal(this.props.userData, row.original, "CANCEL")}>
-                            Cancel
+                            placement="bottom"
+                            delay={{ show: 250, hide: 400 }}
+                            overlay={this.renderTooltip}
+                        >
+
+                            <div className={css([Style.ClickButtons, Style.SubCell])} data-value={JSON.stringify(row.original)} onClick={() => this.showModal(this.props.userData, row.original, "CANCEL")}>
+                                Cancel
                         </div>
                         </OverlayTrigger>
                     )
@@ -236,11 +259,13 @@ class RequestTable extends Component {
         }
 
 
-        const columns = [
+        let columns = [
             applyingemployee,
             {
                 Header: 'Leave Id',
-                accessor: 'lvrqid' // String-based value accessors!
+                accessor: 'lvrqid', // String-based value accessors!
+                width: 80
+
             }, {
                 Header: 'Leave From',
                 accessor: 'startDate',
@@ -275,21 +300,22 @@ class RequestTable extends Component {
                 // Custom cell components!
             },
             {
-                Header: 'leaves',
+                Header: 'No.',
                 accessor: 'noofleaves',
+                width: 50
                 // Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
             },
             {
                 Header: 'Details',
                 Cell: row => {
                     return (
-                      <div>
-                        <span className="class-for-name">{row.original.purpose}</span><br/>
-                        <span className="class-for-description">{row.original.postapprovalval}</span>
-                      </div>
+                        <div>
+                            <span className="class-for-name">{row.original.purpose}</span><br />
+                            <span className="class-for-description">{row.original.postapprovalval}</span>
+                        </div>
                     )
-                  }
-             
+                }
+
 
                 // Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
             }
@@ -297,46 +323,43 @@ class RequestTable extends Component {
 
 
         columns.push(actions)
+        if (this.props.role =='employee' ){
+         columns.shift() 
+        }
         // const [modalShow, setModalShow] = React.useState(false);
 
         return (
             <div>
-               
-
-                    <CustomModal
-                        show={this.state.show}
-                        userData={this.state.userData}
-                        reqData={this.state.reqData}
-                        action={this.state.action}
-                        actionFunction={(a, b, c,d) => this.processLeaveRequest(a, b, c,d)}
-                        onHide={() => this.hideModal()}
-                        showRevert={this.state.showRevert}
-                        revertFunction={this.setRevremarks}
-                        revRemarks={this.state.revRemarks}
-                       
-                    />
-
-                    <MessageModal
-                        show={this.state.messageShow}
-                        message={this.state.message}
-                        action={this.state.action}
-                        onHide={() => this.hideMessageModal()} 
-                       
-
-                        
-                        
-                      
-                    />
-              
 
 
-                <ReactTable className="-striped -highlight"
+                <CustomModal
+                    show={this.state.show}
+                    userData={this.state.userData}
+                    reqData={this.state.reqData}
+                    action={this.state.action}
+                    actionFunction={(a, b, c, d) => this.processLeaveRequest(a, b, c, d)}
+                    onHide={() => this.hideModal()}
+                    showRevert={this.state.showRevert}
+                    revertFunction={(e) => this.setRevremarks(e)}
+                    revRemarks={this.state.revRemarks}
+
+                />
+
+                <MessageModal
+                    show={this.state.messageShow}
+                    message={this.state.message}
+                    action={this.state.action}
+                    onHide={() => this.hideMessageModal()}
+                />
+
+
+
+                <ReactTable striped bordered hover
                     data={this.props.leaveReqDetails}
                     columns={columns}
                     showPagination={true}
                     defaultPageSize={this.state.pageSize}
-                  
-
+                    striped={true}
                 />
 
             </div>

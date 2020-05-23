@@ -12,7 +12,7 @@ class ApplyLeave extends Component {
 
   }
 componentDidMount() {
-  console.log("ddd")
+  console.log("component mounted")
   
 }
 

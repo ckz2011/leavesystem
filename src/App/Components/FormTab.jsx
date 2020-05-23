@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import Constants from '../Config/core';
 import axios from 'axios';
 import MessageModal from './MessageModal'
+import SubmitModal from './SubmitModal'
 import ReactDOM from 'react-dom'
 
 
@@ -34,6 +35,7 @@ class FormTab extends Component {
       messageShow: false,
       message: "",
       check: "",
+      submitParams:""
     
 
     }
@@ -51,6 +53,9 @@ class FormTab extends Component {
   };
   hideMessageModal = () => {
     this.setState({ messageShow: false });
+  };
+  hideSubmitModal = () => {
+    this.setState({ submitShow: false });
   };
   resetForm = () => {
     const stateFormFields = ["startDate", "endDate", "halfdayfrom",
@@ -363,9 +368,6 @@ class FormTab extends Component {
         return
       }
     }
-    let url = Constants.BASE_URL + Constants.FORM_URL;
-    console.log(url);
-    console.log("Final Params going >> ", this.state);
 
     let params = this.state;
     let self = this;
@@ -374,27 +376,33 @@ class FormTab extends Component {
     this.modifyDateString(params)
     // params.endDate = this.modifyDateString(params.endDate)
     // Ajax Call
-    let response = await axios.post(url, params).then((response) => {
-      console.log(response);
+     
       this.setState({
-        messageShow: true,
-        message: response.data
-      })
-
-      ReactDOM.findDOMNode(this.leaveForm).reset();
-      ReactDOM.findDOMNode(this.datepickerTo).value='';
-      ReactDOM.findDOMNode(this.datepickerFrom).value='';
-
-    })
-      .catch((error) => {
-        console.log(error);
+        submitShow: true,
+        submitParams:params
       });
+    
+      return;
 
-
-    return;
 
 
   }
+ postLeaveData=async()=>
+{
+  this.setState({ submitShow: false });
+let params=this.state.submitParams;
+  let url = Constants.BASE_URL + Constants.FORM_URL;
+  console.log(url);
+  console.log("Final Params going >> ", params);
+  let response = await axios.post(url,params ).then((response) => {
+    console.log(response);
+    this.setState({
+      messageShow: true,
+      message: response.data
+    })
+  
+  })
+}
 
 
 
@@ -518,6 +526,13 @@ class FormTab extends Component {
           message={this.state.message}
           action={'apply'}
           onHide={() => this.hideMessageModal()}
+
+        />
+
+<SubmitModal
+          show={this.state.submitShow}
+          onConfirm={() => this.postLeaveData()}
+          onHide={() => this.hideSubmitModal()}
 
         />
       </Jumbotron>

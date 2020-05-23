@@ -29,10 +29,10 @@ class SubmitModal extends Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-           <h3> Do you want to sumit your leave application</h3>
+           <h3> Do you want to sumit your leave application ?</h3>
         </Modal.Body>
         <Modal.Footer>
-        <Button onClick={this.props.onHide}>SUBMIT</Button>
+        <Button onClick={this.props.onConfirm}>SUBMIT</Button>
           <Button onClick={this.props.onHide}>CLOSE</Button>
         </Modal.Footer>
       </Modal>)

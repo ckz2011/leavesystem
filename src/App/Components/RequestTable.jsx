@@ -51,6 +51,11 @@ class RequestTable extends Component {
                   
             
         };
+        
+
+    }
+    componentDidMount(){
+
 
     }
     setRevremarks=(event)=>{
@@ -123,12 +128,15 @@ class RequestTable extends Component {
         this.setState({ show: false });
       
         if (response.data) {
+
+          
           
             this.setState({
                 message:response.data,
                 
                 messageShow: true });
-          
+                this.props.loadRequestDetails()
+               
         }
         else 
         this.setState({
@@ -231,7 +239,7 @@ class RequestTable extends Component {
         const columns = [
             applyingemployee,
             {
-                Header: 'Id',
+                Header: 'Leave Id',
                 accessor: 'lvrqid' // String-based value accessors!
             }, {
                 Header: 'Leave From',
@@ -305,13 +313,18 @@ class RequestTable extends Component {
                         showRevert={this.state.showRevert}
                         revertFunction={this.setRevremarks}
                         revRemarks={this.state.revRemarks}
+                       
                     />
 
                     <MessageModal
                         show={this.state.messageShow}
                         message={this.state.message}
                         action={this.state.action}
-                        onHide={() => this.hideMessageModal()}
+                        onHide={() => this.hideMessageModal()} 
+                       
+
+                        
+                        
                       
                     />
               

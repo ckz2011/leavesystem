@@ -80,7 +80,11 @@ class Loginv2 extends Component {
                 <div class="loginGlobal">
                     <form class="login-div"  onSubmit={this.handleSubmit}>
                         {/* <div class="logo"></div> */}
-                        <div class="title">{CentreShort} Leave System</div>
+                        {/* <div class="title">{CentreShort} CLAPS</div> */}
+                        <div class="title">CLApS <br/>
+                        Casual Leave Application System  
+                        </div>
+                      
                         <div class="logo"></div>
                         <div class="title">Login</div>
                         <p class="inst">Use your COINS credentials for logging in</p>

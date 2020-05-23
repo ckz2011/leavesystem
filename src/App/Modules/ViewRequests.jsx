@@ -18,38 +18,43 @@ class ViewRequests extends Component {
         }
 
     }
+  loadRequestDetails= async () =>
+  {
+    console.log('loadRequestDetails called')
+    try {
 
+        let url = Constants.BASE_URL + Constants.LVREQ_URL;
+        console.log(url);
+
+        // Ajax Call
+
+        let response = await axios.post(url, this.props.userData);
+        console.log("employeecode", this.props.userData)
+        console.log('in lv request lv data', this.state.leaveReqDetails)
+        console.log(response.data);
+        console.log(response.status);
+        if (response.data) {
+            console.log("in view leave request page", response.data.length)
+
+            this.setState({
+
+                leaveReqDetails: response.data
+            })
+
+        }
+        else {
+            alert('No Leave request');
+        }
+    } catch (e) {
+
+        console.log(e);
+    }
+  }
 
     
-    componentDidMount = async () => {
-        try {
-
-            let url = Constants.BASE_URL + Constants.LVREQ_URL;
-            console.log(url);
-
-            // Ajax Call
-
-            let response = await axios.post(url, this.props.userData);
-            console.log("employeecode", this.props.userData)
-            console.log('in lv request lv data', this.state.leaveReqDetails)
-            console.log(response.data);
-            console.log(response.status);
-            if (response.data) {
-                console.log("in view leave request page", response.data.length)
-
-                this.setState({
-
-                    leaveReqDetails: response.data
-                })
-
-            }
-            else {
-                alert('No Leave request');
-            }
-        } catch (e) {
-
-            console.log(e);
-        }
+    componentDidMount()  {
+        this.loadRequestDetails();
+       
     };
 
     render() {
@@ -62,7 +67,7 @@ class ViewRequests extends Component {
 
         return (
             <Container fluid style={{marginLeft:'0px',marginTop:'5px'}}>
-             <RequestTable userData={this.props.userData} role='employee'  leaveReqDetails={this.state.leaveReqDetails}  ></RequestTable>
+             <RequestTable userData={this.props.userData} role='employee'  leaveReqDetails={this.state.leaveReqDetails}   loadRequestDetails={()=>this.loadRequestDetails()}  ></RequestTable>
             </Container>
         )
     }

@@ -29,7 +29,7 @@ class MessageModal extends Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-           <p>  {this.props.message}</p>
+           <h3>  {this.props.message}</h3>
         </Modal.Body>
         <Modal.Footer>
        

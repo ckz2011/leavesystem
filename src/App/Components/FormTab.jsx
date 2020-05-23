@@ -415,7 +415,7 @@ class FormTab extends Component {
     return (
 
       <Jumbotron style={{ paddingBottom: '3%', paddingTop: '4%', boxShadow: '2px 4px #bbedb9', border: '1px solid #bbedb9' }}>
-        <Form onSubmit={this.submitHandler} ref={form=>this.leaveForm=form}>
+        <Form onSubmit={(e) => { if (window.confirm('Do you want to sumit your Leave ??')) this.submitHandler(e) } }    ref={form=>this.leaveForm=form}>
       
        
           <h4  style={{ textAlign: 'center' }}>Leave Application Form</h4><br/>

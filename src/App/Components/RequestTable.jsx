@@ -5,6 +5,7 @@ import ReactTable from 'react-table';
 import { StyleSheet, css } from 'aphrodite'
 import axios from 'axios';
 import Constants from '../Config/core';
+import { Tooltip,OverlayTrigger } from 'react-bootstrap'
 
 const Style = StyleSheet.create({
     ClickButtons: {
@@ -138,7 +139,14 @@ class RequestTable extends Component {
 
 
     }
-
+    renderTooltip=(props)=> {
+        return (
+          <Tooltip id="button-tooltip" {...props}>
+            Forwaded/Approved requests will require permission of respective officer for cancellation
+          </Tooltip>
+        );
+      }
+      
 
 
     render() {
@@ -200,11 +208,16 @@ class RequestTable extends Component {
                     Header: 'Action',
                     accessor: '',
                     Cell: row => (
-                        // Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+                        <OverlayTrigger
+                        placement="bottom"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={this.renderTooltip}
+                      >
+                       
                         <div className={css([Style.ClickButtons, Style.SubCell])} data-value={JSON.stringify(row.original)} onClick={() => this.showModal(this.props.userData, row.original, "CANCEL")}>
                             Cancel
                         </div>
-
+                        </OverlayTrigger>
                     )
                 }
                 applyingemployee = ''
@@ -218,7 +231,7 @@ class RequestTable extends Component {
         const columns = [
             applyingemployee,
             {
-                Header: 'Request Id',
+                Header: 'Id',
                 accessor: 'lvrqid' // String-based value accessors!
             }, {
                 Header: 'Leave From',
@@ -254,7 +267,7 @@ class RequestTable extends Component {
                 // Custom cell components!
             },
             {
-                Header: 'No of leaves',
+                Header: 'leaves',
                 accessor: 'noofleaves',
                 // Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
             },

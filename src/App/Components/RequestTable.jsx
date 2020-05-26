@@ -148,7 +148,9 @@ class RequestTable extends Component {
 
                 messageShow: true
             });
-            this.props.loadRequestDetails()
+          if(this.props.loadRequestDetails)
+          {this.props.loadRequestDetails()
+          }
 
         }
         else

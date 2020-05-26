@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import ApplyLeave from '../Modules/ApplyLeave';
 import ViewRequests from '../Modules/ViewRequests';
 import PendingRequest from '../Modules/PendingRequest';
+import ReportingOfficers from '../Modules/ReportingOfficers';
 export default class MainPanel extends Component {
     render() {
         //Get button value
@@ -20,6 +21,10 @@ export default class MainPanel extends Component {
                 break;
                 case "PendingRequest":
                     LoadScreen= PendingRequest
+                    break;
+                case "ReportingOfficers":
+                LoadScreen=ReportingOfficers
+                break;
             default:
                 break;
         }

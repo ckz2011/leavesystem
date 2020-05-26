@@ -6,4 +6,5 @@ constants.FORM_URL = "/leave/submitleave"
 constants.LVREQ_URL = "/leave/getemployeeleaverequest"
 constants.PENDINGLVREQ_URL = "/leave/getpendingleaverequest"
 constants.PROCESSLVREQ_URL = "/leave/processpendingleaverequest"
+constants.FORWARDINGOFFLIST_URL = "/leave/getforwardingofficers"
 module.exports = constants;

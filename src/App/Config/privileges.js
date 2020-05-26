@@ -10,6 +10,7 @@ let privileges = {
         "Pending Requests": "PendingRequest",
         // "Employee Leave Status": "EmployeeLvStatus",
         // "Leave Report": "LeaveReport"
+        "Reporting Officers": "ReportingOfficers"
 
     },
     forwardoff: {

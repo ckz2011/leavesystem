@@ -71,7 +71,7 @@ class ReportingOfficers extends Component {
 
                     listOfForwardingOff: response.data
                 })
-               // console.log(" list of officer",this.state.listOfForwardingOff)
+               console.log(" list of officer",this.state.listOfForwardingOff)
 
             }
             else {
